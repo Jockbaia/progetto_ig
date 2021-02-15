@@ -564,6 +564,22 @@ void keyboard(unsigned char key, int x, int y)
 		std::cout << "SI\n";
 		piano->play2D("audios/si.wav", false);
 		break;
+	case 'k': // DO2
+		std::cout << "DO2\n";
+		piano->play2D("audios/do2.wav", false);
+		break;
+	case 'o': // DO#2
+		std::cout << "DO#2\n";
+		piano->play2D("audios/do#2.wav", false);
+		break;
+	case 'l': // RE2
+		std::cout << "RE2\n";
+		piano->play2D("audios/re2.wav", false);
+		break;
+	case 'p': // RE#2
+		std::cout << "re#2\n";
+		piano->play2D("audios/re#2.wav", false);
+		break;
 	default:
 		break;
 	}

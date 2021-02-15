@@ -45,4 +45,5 @@ D:\GitHub\progetto_ig\progetto_ig\AssImp\include\aiMatrix4x4.inl(356,23): warnin
 D:\GitHub\progetto_ig\progetto_ig\AssImp\include\aiMatrix4x4.inl(357,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 D:\GitHub\progetto_ig\progetto_ig\AssImp\include\aiMatrix4x4.inl(365,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 D:\GitHub\progetto_ig\progetto_ig\AssImp\include\aiMatrix4x4.inl(365,24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+SimpleOpenGL_Loader.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
   SimpleOpenGLTexturedLoader.vcxproj -> D:\GitHub\progetto_ig\progetto_ig\SimpleOpenGLTexturedLoader\Debug\SimpleOpenGLTexturedLoader.exe

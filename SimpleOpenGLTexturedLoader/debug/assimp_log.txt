@@ -1,21 +1,21 @@
-Info,  T5832: Load models/piano.obj
-Info,  T5832: Found a matching importer for this file format
-Info,  T5832: Import root directory is 'models\'
-Error, T5832: OBJ/MTL: Unexpected illumination model (0-2 recognized)
+Info,  T13564: Load models/piano.obj
+Info,  T13564: Found a matching importer for this file format
+Info,  T13564: Import root directory is 'models\'
+Error, T13564: OBJ/MTL: Unexpected illumination model (0-2 recognized)
 Skipping one or more lines with the same contents
-Info,  T5832: Entering post processing pipeline
-Info,  T5832: RemoveRedundantMatsProcess finished. 2 redundant and 1 unused materials
-Warn,  T5832: Found 52 degenerated primitives
+Info,  T13564: Entering post processing pipeline
+Info,  T13564: RemoveRedundantMatsProcess finished. 2 redundant and 1 unused materials
+Warn,  T13564: Found 52 degenerated primitives
 Skipping one or more lines with the same contents
-Warn,  T5832: Found 72 degenerated primitives
-Info,  T5832: TriangulateProcess finished. All polygons have been triangulated.
-Info,  T5832: Points: 0, Lines: 3, Triangles: 22, Polygons: 0 (Meshes, X = removed)
-Error, T5832: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
-Info,  T5832: FindInvalidDataProcess finished. Found issues ...
-Info,  T5832: Tangents are undefined for line and point meshes
+Warn,  T13564: Found 72 degenerated primitives
+Info,  T13564: TriangulateProcess finished. All polygons have been triangulated.
+Info,  T13564: Points: 0, Lines: 3, Triangles: 22, Polygons: 0 (Meshes, X = removed)
+Error, T13564: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
+Info,  T13564: FindInvalidDataProcess finished. Found issues ...
+Info,  T13564: Tangents are undefined for line and point meshes
 Skipping one or more lines with the same contents
-Info,  T5832: JoinVerticesProcess finished | Verts in: 49948 out: 27511 | ~44.9%
-Error, T5832: This algorithm works on triangle meshes only
+Info,  T13564: JoinVerticesProcess finished | Verts in: 49948 out: 27511 | ~44.9%
+Error, T13564: This algorithm works on triangle meshes only
 Skipping one or more lines with the same contents
-Info,  T5832: Cache relevant are 22 meshes (20000 faces). Average output ACMR is 1.430450
-Info,  T5832: Leaving post processing pipeline
+Info,  T13564: Cache relevant are 22 meshes (20000 faces). Average output ACMR is 1.430450
+Info,  T13564: Leaving post processing pipeline
