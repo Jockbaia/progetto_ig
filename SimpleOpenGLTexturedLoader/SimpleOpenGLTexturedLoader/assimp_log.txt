@@ -1,0 +1,2 @@
+Info,  T13632: Load models/piano.obj
+Error, T13632: Unable to open file "models/piano.obj".
