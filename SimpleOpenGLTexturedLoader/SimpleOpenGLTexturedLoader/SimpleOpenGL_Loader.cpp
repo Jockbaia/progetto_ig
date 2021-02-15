@@ -12,6 +12,7 @@
 #include <map>
 
 using namespace irrklang;
+ISoundEngine* piano = createIrrKlangDevice();
 
 // currently this is hardcoded
 //static const std::string basepath = "./models/textures/"; //obj..
@@ -509,6 +510,7 @@ int InitGL()					 // All Setup For OpenGL goes here
 
 void keyboard(unsigned char key, int x, int y)
 {
+	
 
 	switch (key) {
 	case 27:
@@ -516,50 +518,62 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'a': // DO
 		std::cout << "DO\n";
+		piano->play2D("audios/do.wav", false);
 		break;
 	case 'w': // DO#
 		std::cout << "DO#\n";
+		piano->play2D("audios/do#.wav", false);
 		break;
 	case 's': // RE
 		std::cout << "RE\n";
+		piano->play2D("audios/re.wav", false);
 		break;
 	case 'e': // RE#
 		std::cout << "RE#\n";
+		piano->play2D("audios/re#.wav", false);
 		break;
 	case 'd': // MI
 		std::cout << "MI\n";
+		piano->play2D("audios/mi.wav", false);
 		break;
 	case 'f': // FA
 		std::cout << "FA\n";
+		piano->play2D("audios/fa.wav", false);
 		break;
 	case 't': // FA#
 		std::cout << "FA#\n";
+		piano->play2D("audios/fa#.wav", false);
 		break;
 	case 'g': // SOL
 		std::cout << "SOL\n";
+		piano->play2D("audios/sol.wav", false);
 		break;
 	case 'y': // SOL#
 		std::cout << "SOL#\n";
+		piano->play2D("audios/sol#.wav", false);
 		break;
 	case 'h': // LA
 		std::cout << "LA\n";
+		piano->play2D("audios/la.wav", false);
 		break;
 	case 'u': // LA#
 		std::cout << "LA#\n";
+		piano->play2D("audios/la#.wav", false);
 		break;
 	case 'j': // SI
 		std::cout << "SI\n";
+		piano->play2D("audios/si.wav", false);
 		break;
 	default:
 		break;
 	}
+	
 }
 
 // ----------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
 	struct aiLogStream stream;
-	ISoundEngine* engine = createIrrKlangDevice();
 
 	glutInitWindowSize(900,600);
 	glutInitWindowPosition(100,100);
@@ -604,13 +618,6 @@ int main(int argc, char **argv)
 		fprintf(stderr,"Initialization failed");
 		return FALSE;
 	}
-
-	if (!engine)
-		return 0; // error starting up the engine
-
-	  // play some sound stream, looped
-	engine->play2D("audios/beep.wav", true);
-
 
 	glutGet(GLUT_ELAPSED_TIME);
 	glutMainLoop();
