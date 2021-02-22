@@ -25,6 +25,26 @@ void* font1 = GLUT_BITMAP_TIMES_ROMAN_24;		//font schermata menu
 void* font2 = GLUT_BITMAP_HELVETICA_18;
 short int pos_titolo, pos_start, pos_diff;
 
+//				***	SONG(S)	***
+typedef struct n {
+	char key;
+	float x;
+	struct n* next = NULL;
+} nota_t;
+
+typedef struct s {
+	//std::string name = "Twinkle twinkle little star";
+	float base_coord = 1;
+	float offset = 0.1;
+	nota_t *note = NULL;
+} song_t;
+
+nota_t DO, RE, MI, FA, SOL, LA, SI, pause;
+nota_t vett[50];
+int n = 0;
+float speed = -0.01;
+song_t ttls;
+
 using namespace irrklang;
 ISoundEngine* piano = createIrrKlangDevice();
 
@@ -332,6 +352,7 @@ void recursive_render(const struct aiScene* sc, const struct aiNode* nd, float s
 	glPopMatrix();
 }
 
+
 // ----------------------------------------------------------------------------
 
 void do_motion(void)
@@ -352,7 +373,7 @@ void do_motion(void)
 	glutPostRedisplay();
 }
 
-// ----------------------------------------------------------------------------
+// --------------------- GAME SECTION ----------------------------
 
 void output(int x, int y, std::string str, void* font)
 {
@@ -412,24 +433,56 @@ void get_coords(void) {
 		<< "X " << x << " | Z " << z << " | LX " << lx << " | LZ " << lz << "| ANGLE " << angle << "\n";
 }
 
+void play_song() {
+	//glClear(GL_COLOR_BUFFER_BIT);
+
+	glScalef(1, 1, 1);
+	glColor3f(1.0, 1.0, 1.0);
+	glPushMatrix();
+	glLoadIdentity();
+	n = 0;
+	/*while (n < 48) {
+		if (ttls.base_coord + ttls.offset * n > 2)
+			break;
+
+		glTranslatef(ttls.note[n].x, ttls.base_coord + n * ttls.offset, -3);
+		glutSolidSphere(0.03, 4, 4);
+		glTranslatef(-ttls.note[n].x, -ttls.base_coord - n * ttls.offset, 3);
+		glPopMatrix();
+		n++;
+	}*/
+	ttls.base_coord = ttls.base_coord + speed;
+	while (n < 48) {
+		glTranslatef(ttls.note[n].x, -1 + n * ttls.offset, -3);
+		glutSolidSphere(0.03, 4, 4);
+		glTranslatef(-ttls.note[n].x, +1 - n * ttls.offset, 3);
+		glPopMatrix();
+		n++;
+	}
+	glutSwapBuffers();
+	//glutPostRedisplay();
+}
+
 void show_piano(void) {
 	float tmp;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	// angle = 28.31;
 
-	gluLookAt(x, height, z, x + lx, 1.0f, z + lz, 0.0f, 1.0f, 0.0f);
+	//gluLookAt(x, height, z, x + lx, 1.0f, z + lz, 0.0f, 1.0f, 0.0f);
+	gluLookAt(-6.8f, 0.7f, 1.f, -6.8f, -0.3f, 5, 0, 1, 0);
 
 	// scale the whole asset to fit into our view frustum 
-	// tmp = scene_max.x - scene_min.x;
-	// tmp = aisgl_max(scene_max.y - scene_min.y, tmp);
-	// tmp = aisgl_max(scene_max.z - scene_min.z, tmp);
-	// tmp = 1.f / tmp;
-	// glScalef(tmp, tmp, tmp);
+	 tmp = scene_max.x - scene_min.x;
+	 tmp = aisgl_max(scene_max.y - scene_min.y, tmp);
+	 tmp = aisgl_max(scene_max.z - scene_min.z, tmp);
+	 tmp = 1.f / tmp;
+	 //glScalef(tmp, tmp, tmp);
 
-	glScalef(4, 4, 4);
+	glScalef(4,4,4);
 
 	// center the model
 	glTranslatef(-scene_center.x, -scene_center.y, -scene_center.z);
@@ -448,9 +501,20 @@ void show_piano(void) {
 
 	glCallList(scene_list);
 
-	glutPostRedisplay();
-	glutSwapBuffers();
+	/*//TEST POSIZIONE PIANO
+	//glScalef(1,1,1);
+	glColor3f(1.0, 0.0, 1.0);
+	glPushMatrix();
+	glLoadIdentity();
+	glTranslatef(0.05,-0.4,-3);
+	glutSolidSphere(0.04, 4, 4);
+	glPopMatrix();*/
+
+	play_song();
+	//glutSwapBuffers();
+	//glutPostRedisplay();
 }
+
 void menu_display(void)
 {
 
@@ -487,13 +551,100 @@ void menu_display(void)
 	glutSwapBuffers();
 }
 
+void define_main_pitches() {
+	//do
+	DO.key = 'A';
+	DO.x = -0.12;
+	//re
+	RE.key = 'S';
+	RE.x = -0.06;
+	//mi
+	MI.key = 'D';
+	MI.x = 0;
+	//fa
+	FA.key = 'F';
+	FA.x = 0.06;
+	//sol
+	SOL.key = 'G';
+	SOL.x = 0.12;
+	//la
+	LA.key = 'H';
+	LA.x = 0.18;
+	//si
+	SI.key = 'J';
+	SI.x = 0.24;
+	//pause (fake)
+	pause.key = '_';
+	pause.x = 1;
+
+}
+
+void create_song() {
+	//create ttls
+	vett[0] = DO;
+	vett[1] = DO;
+	vett[2] = SOL;
+	vett[3] = SOL;
+	vett[4] = LA;
+	vett[5] = LA;
+	vett[6] = SOL;
+	vett[7] = pause;
+
+	vett[8] = FA;
+	vett[9] = FA;
+	vett[10] = MI;
+	vett[11] = MI;
+	vett[12] = RE;
+	vett[13] = RE;
+	vett[14] = DO;
+	vett[15] = pause;
+
+	vett[16] = SOL;
+	vett[17] = SOL;
+	vett[18] = FA;
+	vett[19] = FA;
+	vett[20] = MI;
+	vett[21] = MI;
+	vett[22] = RE;
+	vett[23] = pause;
+
+	vett[24] = SOL;
+	vett[25] = SOL;
+	vett[26] = FA;
+	vett[27] = FA;
+	vett[28] = MI;
+	vett[29] = MI;
+	vett[30] = RE;
+	vett[31] = pause;
+
+	vett[32] = DO;
+	vett[33] = DO;
+	vett[34] = SOL;
+	vett[35] = SOL;
+	vett[36] = LA;
+	vett[37] = LA;
+	vett[38] = SOL;
+	vett[39] = pause;
+
+	vett[40] = FA;
+	vett[41] = FA;
+	vett[42] = MI;
+	vett[43] = MI;
+	vett[44] = RE;
+	vett[45] = RE;
+	vett[46] = DO;
+	vett[47] = pause;
+	ttls.note = vett;
+}
+
+
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Display according to the flag:
 	// 1 = Main Menù
-	// 0 = Free-roaming
+	// 0 = Free-roaming / game
 
 	if (menu == 1) {
 		menu_display();
@@ -501,6 +652,7 @@ void display(void)
 	}
 	else {
 		show_piano();
+//		play_song();
 	}
 }
 
@@ -839,6 +991,9 @@ int main(int argc, char** argv)
 	glutMouseFunc(mouse);
 	glutReshapeFunc(reshape);
 
+	define_main_pitches();
+	create_song();
+
 	// get a handle to the predefined STDOUT log stream and attach
 	// it to the logging system. It will be active for all further
 	// calls to aiImportFile(Ex) and aiApplyPostProcessing.
@@ -854,6 +1009,7 @@ int main(int argc, char** argv)
 	// the model name can be specified on the command line. 
 
 	loadasset("../debug/models/room_2.obj");
+	//loadasset("../debug/models/piano.obj");
 
 	/*
 	 if(argc>=2)
