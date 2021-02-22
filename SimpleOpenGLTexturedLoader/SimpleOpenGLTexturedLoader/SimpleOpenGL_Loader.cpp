@@ -441,7 +441,7 @@ void play_song() {
 	glPushMatrix();
 	glLoadIdentity();
 	n = 0;
-	/*while (n < 48) {
+	while (n < 48) {
 		if (ttls.base_coord + ttls.offset * n > 2)
 			break;
 
@@ -450,17 +450,17 @@ void play_song() {
 		glTranslatef(-ttls.note[n].x, -ttls.base_coord - n * ttls.offset, 3);
 		glPopMatrix();
 		n++;
-	}*/
+	}
 	ttls.base_coord = ttls.base_coord + speed;
-	while (n < 48) {
+	/*while (n < 48) {
 		glTranslatef(ttls.note[n].x, -1 + n * ttls.offset, -3);
 		glutSolidSphere(0.03, 4, 4);
 		glTranslatef(-ttls.note[n].x, +1 - n * ttls.offset, 3);
 		glPopMatrix();
 		n++;
-	}
+	}*/
 	glutSwapBuffers();
-	//glutPostRedisplay();
+	glutPostRedisplay();
 }
 
 void show_piano(void) {
