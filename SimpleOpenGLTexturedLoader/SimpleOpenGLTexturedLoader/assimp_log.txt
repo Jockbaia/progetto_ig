@@ -1,23 +1,23 @@
-Info,  T5364: Load ../debug/models/room_2.obj
-Info,  T5364: Found a matching importer for this file format
-Info,  T5364: Import root directory is '../debug/models\'
-Error, T5364: OBJ/MTL: Unexpected illumination model (0-2 recognized)
+Info,  T25168: Load ../debug/models/room_2.obj
+Info,  T25168: Found a matching importer for this file format
+Info,  T25168: Import root directory is '../debug/models\'
+Error, T25168: OBJ/MTL: Unexpected illumination model (0-2 recognized)
 Skipping one or more lines with the same contents
-Info,  T5364: Entering post processing pipeline
-Info,  T5364: RemoveRedundantMatsProcess finished. 3 redundant and 1 unused materials
-Warn,  T5364: Found 52 degenerated primitives
+Info,  T25168: Entering post processing pipeline
+Info,  T25168: RemoveRedundantMatsProcess finished. 3 redundant and 1 unused materials
+Warn,  T25168: Found 52 degenerated primitives
 Skipping one or more lines with the same contents
-Warn,  T5364: Found 72 degenerated primitives
-Info,  T5364: TriangulateProcess finished. All polygons have been triangulated.
-Info,  T5364: Points: 0, Lines: 3, Triangles: 32, Polygons: 0 (Meshes, X = removed)
-Error, T5364: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
+Warn,  T25168: Found 72 degenerated primitives
+Info,  T25168: TriangulateProcess finished. All polygons have been triangulated.
+Info,  T25168: Points: 0, Lines: 3, Triangles: 32, Polygons: 0 (Meshes, X = removed)
+Error, T25168: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
 Skipping one or more lines with the same contents
-Info,  T5364: FindInvalidDataProcess finished. Found issues ...
-Info,  T5364: Tangents are undefined for line and point meshes
+Info,  T25168: FindInvalidDataProcess finished. Found issues ...
+Info,  T25168: Tangents are undefined for line and point meshes
 Skipping one or more lines with the same contents
-Error, T5364: Unable to compute tangents: UV0 and normals must be there 
-Info,  T5364: JoinVerticesProcess finished | Verts in: 112676 out: 90615 | ~19.6%
-Error, T5364: This algorithm works on triangle meshes only
+Error, T25168: Unable to compute tangents: UV0 and normals must be there 
+Info,  T25168: JoinVerticesProcess finished | Verts in: 112676 out: 90615 | ~19.6%
+Error, T25168: This algorithm works on triangle meshes only
 Skipping one or more lines with the same contents
-Info,  T5364: Cache relevant are 32 meshes (51290 faces). Average output ACMR is 1.786996
-Info,  T5364: Leaving post processing pipeline
+Info,  T25168: Cache relevant are 32 meshes (51290 faces). Average output ACMR is 1.786996
+Info,  T25168: Leaving post processing pipeline

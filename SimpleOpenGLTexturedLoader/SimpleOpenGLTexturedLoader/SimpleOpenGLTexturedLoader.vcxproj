@@ -90,7 +90,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="SimpleOpenGL_Loader.cpp" />
+    <ClCompile Include="controls.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="modelLoader.cpp" />
+    <ClCompile Include="songs.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="controls.h" />
+    <ClInclude Include="modelLoader.h" />
+    <ClInclude Include="songs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

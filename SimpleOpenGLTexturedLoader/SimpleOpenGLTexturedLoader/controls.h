@@ -1,0 +1,22 @@
+#include <stdlib.h>
+#include <irrKlang.h>
+#include "GL/glut.h"
+
+#define XRES 1280
+#define YRES 720
+
+//// LIBRERIA SONORA irrKlang
+using namespace irrklang;
+extern ISoundEngine* piano;
+
+/// MENU COORDS
+// Le variabili sono dichiarate in controls.cpp
+extern double eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz;
+extern float angle_start, lx, lz, x, z, angle, height;
+extern char menu;
+extern char difficulty;
+extern short int pos_titolo, pos_start, pos_diff;
+
+void keyboard(unsigned char key, int x, int y);
+void movement(int key, int xx, int yy);
+void get_coords(void);

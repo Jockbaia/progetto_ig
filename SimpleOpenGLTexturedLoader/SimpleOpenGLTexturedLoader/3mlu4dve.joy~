@@ -1,0 +1,619 @@
+#include "modelLoader.h"
+#include <iostream>
+#include <irrKlang.h>
+#include <stdlib.h>
+#include <Windows.h>
+
+#define XRES 1280
+#define YRES 720
+
+//				*** GAME VARIABLES ***
+char menu = 1;
+char difficulty = 2;	// 1 = EASY, 2 = MEDIUM, 3 = HARD
+void* font1 = GLUT_BITMAP_TIMES_ROMAN_24;		//font schermata menu
+void* font2 = GLUT_BITMAP_HELVETICA_18;
+short int pos_titolo, pos_start, pos_diff;
+
+//				***	SONG(S)	***
+typedef struct n {
+	char key;
+	float x;
+	struct n* next = NULL;
+} nota_t;
+
+typedef struct s {
+	//std::string name = "Twinkle twinkle little star";
+	float base_coord = 1;
+	float offset = 0.1;
+	nota_t *note = NULL;
+} song_t;
+
+nota_t DO, RE, MI, FA, SOL, LA, SI, pause;
+nota_t vett[50];
+int n = 0;
+float speed = -0.01;
+song_t ttls;
+
+using namespace irrklang;
+ISoundEngine* piano = createIrrKlangDevice();
+
+
+
+
+
+// angle of rotation for the camera direction
+
+float angle_start = 28.3f;
+
+// COORDINATE MOVIMENTO
+// XZ position of the camera
+// actual vector representing the camera's direction
+float lx = 0.00433532, lz = 0.999991;
+float x = -6.86088, z = 6.1202;
+float angle = 28.27f;
+float height = 3.f;
+
+// current rotation angle
+// static float angle = 28;
+
+
+
+
+
+// MENU COORDS
+
+double eyex = 0.f;
+double eyey = 0.f;
+double eyez = -3.f;
+double centerx = 0.f;
+double centery = 0.f;
+double centerz = 5.f;
+double upx = 0.f;
+double upy = 1.f;
+double upz = 0.f;
+
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+
+void do_motion(void)
+{
+	//static GLint prev_time = 0;
+	static float increment = 0.05;
+	//int time = glutGet(GLUT_ELAPSED_TIME);
+	if (angle_start > 40) {
+		increment = -0.05;
+	}
+	if (angle_start < 28) {
+		increment = +0.05;
+	}
+
+	angle_start += increment;
+	//prev_time = time;
+
+	glutPostRedisplay();
+}
+
+// --------------------- GAME SECTION ----------------------------
+
+void output(int x, int y, std::string str, void* font)
+{
+	int len, i;
+
+	glRasterPos2f(x, y);        //set text position in the window
+	len = str.length();
+
+	for (i = 0; i < len; i++) {
+		glutBitmapCharacter(font, str[i]);
+	}
+	glutPostRedisplay();
+}
+
+void show_room(void) {
+	float tmp;
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
+
+	// rotate it around the y axis
+	glRotatef(angle_start, 0.f, 1.f, 0.f);
+	
+	// scale the whole asset to fit into our view frustum 
+	// tmp = scene_max.x - scene_min.x;
+	// tmp = aisgl_max(scene_max.y - scene_min.y, tmp);
+	// tmp = aisgl_max(scene_max.z - scene_min.z, tmp);
+	// tmp = 1.f / tmp;
+	// glScalef(tmp, tmp, tmp);
+	glScalef(3, 3, 3);
+
+	// center the model
+	glTranslatef(-scene_center.x, -scene_center.y, -scene_center.z);
+
+	// if the display list has not been made yet, create a new one and
+	// fill it with scene contents
+	if (scene_list == 0) {
+		scene_list = glGenLists(1);
+		glNewList(scene_list, GL_COMPILE);
+		// now begin at the root node of the imported data and traverse
+		// the scenegraph by multiplying subsequent local transforms
+		// together on GL's matrix stack.
+		recursive_render(scene, scene->mRootNode, 1.0);
+		glEndList();
+	}
+
+	glCallList(scene_list);
+
+	glutSwapBuffers();
+
+	do_motion();
+}
+
+void get_coords(void) {
+	std::cout << "gluLookAt(" << x << ", " << height << ", " << z << ", " << x + lx << ", centery, " << x + lz << ", " << upx << ", " << upy << ", " << upz << ");\n"
+		<< "X " << x << " | Z " << z << " | LX " << lx << " | LZ " << lz << "| ANGLE " << angle << "\n";
+}
+
+void play_song() {
+	//glClear(GL_COLOR_BUFFER_BIT);
+
+	glScalef(1, 1, 1);
+	glColor3f(1.0, 1.0, 1.0);
+	glPushMatrix();
+	glLoadIdentity();
+	n = 0;
+	while (n < 48) {
+		if (ttls.base_coord + ttls.offset * n > 2)
+			break;
+
+		glTranslatef(ttls.note[n].x, ttls.base_coord + n * ttls.offset, -3);
+		glutSolidSphere(0.03, 4, 4);
+		glTranslatef(-ttls.note[n].x, -ttls.base_coord - n * ttls.offset, 3);
+		glPopMatrix();
+		n++;
+	}
+	ttls.base_coord = ttls.base_coord + speed;
+	/*while (n < 48) {
+		glTranslatef(ttls.note[n].x, -1 + n * ttls.offset, -3);
+		glutSolidSphere(0.03, 4, 4);
+		glTranslatef(-ttls.note[n].x, +1 - n * ttls.offset, 3);
+		glPopMatrix();
+		n++;
+	}*/
+	glutSwapBuffers();
+	glutPostRedisplay();
+}
+
+void show_piano(void) {
+	float tmp;
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	// angle = 28.31;
+
+	//gluLookAt(x, height, z, x + lx, 1.0f, z + lz, 0.0f, 1.0f, 0.0f);
+	gluLookAt(-6.8f, 0.7f, 1.f, -6.8f, -0.3f, 5, 0, 1, 0);
+
+	// scale the whole asset to fit into our view frustum 
+	 tmp = scene_max.x - scene_min.x;
+	 tmp = aisgl_max(scene_max.y - scene_min.y, tmp);
+	 tmp = aisgl_max(scene_max.z - scene_min.z, tmp);
+	 tmp = 1.f / tmp;
+	 //glScalef(tmp, tmp, tmp);
+
+	glScalef(4,4,4);
+
+	// center the model
+	glTranslatef(-scene_center.x, -scene_center.y, -scene_center.z);
+
+	// if the display list has not been made yet, create a new one and
+	// fill it with scene contents
+	if (scene_list == 0) {
+		scene_list = glGenLists(1);
+		glNewList(scene_list, GL_COMPILE);
+		// now begin at the root node of the imported data and traverse
+		// the scenegraph by multiplying subsequent local transforms
+		// together on GL's matrix stack.
+		recursive_render(scene, scene->mRootNode, 1.0);
+		glEndList();
+	}
+
+	glCallList(scene_list);
+
+	/*//TEST POSIZIONE PIANO
+	//glScalef(1,1,1);
+	glColor3f(1.0, 0.0, 1.0);
+	glPushMatrix();
+	glLoadIdentity();
+	glTranslatef(0.05,-0.4,-3);
+	glutSolidSphere(0.04, 4, 4);
+	glPopMatrix();*/
+
+	play_song();
+	//glutSwapBuffers();
+	//glutPostRedisplay();
+}
+
+void menu_display(void)
+{
+
+	glClear(GL_COLOR_BUFFER_BIT);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(1.0, XRES, 1.0, YRES);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	char text_row_3[30] = "";
+	std::string text_row_1 = "W E L C O M E";
+	std::string text_row_2 = "Start new game";
+	sprintf(text_row_3, "Select difficulty: %d", difficulty);
+	std::string text_row_4 = "(1=EASY, 2=MEDIUM, 3=HARD)";
+
+	pos_titolo = 500;
+	output(500, pos_titolo, text_row_1, font1);
+	pos_start = 150;
+	output(500, pos_start, text_row_2, font2);
+	pos_diff = 100;
+	output(495, pos_diff, text_row_3, font2);
+	output(440, pos_diff - 50, text_row_4, font2);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+
+	show_room();
+	glutSwapBuffers();
+}
+
+void define_main_pitches() {
+	//do
+	DO.key = 'A';
+	DO.x = -0.12;
+	//re
+	RE.key = 'S';
+	RE.x = -0.06;
+	//mi
+	MI.key = 'D';
+	MI.x = 0;
+	//fa
+	FA.key = 'F';
+	FA.x = 0.06;
+	//sol
+	SOL.key = 'G';
+	SOL.x = 0.12;
+	//la
+	LA.key = 'H';
+	LA.x = 0.18;
+	//si
+	SI.key = 'J';
+	SI.x = 0.24;
+	//pause (fake)
+	pause.key = '_';
+	pause.x = 1;
+
+}
+
+void create_song() {
+	//create ttls
+	vett[0] = DO;
+	vett[1] = DO;
+	vett[2] = SOL;
+	vett[3] = SOL;
+	vett[4] = LA;
+	vett[5] = LA;
+	vett[6] = SOL;
+	vett[7] = pause;
+
+	vett[8] = FA;
+	vett[9] = FA;
+	vett[10] = MI;
+	vett[11] = MI;
+	vett[12] = RE;
+	vett[13] = RE;
+	vett[14] = DO;
+	vett[15] = pause;
+
+	vett[16] = SOL;
+	vett[17] = SOL;
+	vett[18] = FA;
+	vett[19] = FA;
+	vett[20] = MI;
+	vett[21] = MI;
+	vett[22] = RE;
+	vett[23] = pause;
+
+	vett[24] = SOL;
+	vett[25] = SOL;
+	vett[26] = FA;
+	vett[27] = FA;
+	vett[28] = MI;
+	vett[29] = MI;
+	vett[30] = RE;
+	vett[31] = pause;
+
+	vett[32] = DO;
+	vett[33] = DO;
+	vett[34] = SOL;
+	vett[35] = SOL;
+	vett[36] = LA;
+	vett[37] = LA;
+	vett[38] = SOL;
+	vett[39] = pause;
+
+	vett[40] = FA;
+	vett[41] = FA;
+	vett[42] = MI;
+	vett[43] = MI;
+	vett[44] = RE;
+	vett[45] = RE;
+	vett[46] = DO;
+	vett[47] = pause;
+	ttls.note = vett;
+}
+
+
+void display(void)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Display according to the flag:
+	// 1 = Main Menù
+	// 0 = Free-roaming / game
+
+	if (menu == 1) {
+		menu_display();
+		show_room();
+	}
+	else {
+		show_piano();
+//		play_song();
+	}
+}
+
+// ----------------------------------------------------------------------------
+
+
+void keyboard(unsigned char key, int x, int y)
+{
+	float fraction = 0.1f;
+
+	if (!menu) {					// Keys enabled in Room View
+		switch (key) {
+		case 27:
+			exit(1);
+			break;
+		case 'a': // DO
+			std::cout << "DO\n";
+			piano->play2D("audios/do.wav", false);
+			break;
+		case 'w': // DO#
+			std::cout << "DO#\n";
+			piano->play2D("audios/do#.wav", false);
+			break;
+		case 's': // RE
+			std::cout << "RE\n";
+			piano->play2D("audios/re.wav", false);
+			break;
+		case 'e': // RE#
+			std::cout << "RE#\n";
+			piano->play2D("audios/re#.wav", false);
+			break;
+		case 'd': // MI
+			std::cout << "MI\n";
+			piano->play2D("audios/mi.wav", false);
+			break;
+		case 'f': // FA
+			std::cout << "FA\n";
+			piano->play2D("audios/fa.wav", false);
+			break;
+		case 't': // FA#
+			std::cout << "FA#\n";
+			piano->play2D("audios/fa#.wav", false);
+			break;
+		case 'g': // SOL
+			std::cout << "SOL\n";
+			piano->play2D("audios/sol.wav", false);
+			break;
+		case 'y': // SOL#
+			std::cout << "SOL#\n";
+			piano->play2D("audios/sol#.wav", false);
+			break;
+		case 'h': // LA
+			std::cout << "LA\n";
+			piano->play2D("audios/la.wav", false);
+			break;
+		case 'u': // LA#
+			std::cout << "LA#\n";
+			piano->play2D("audios/la#.wav", false);
+			break;
+		case 'j': // SI
+			std::cout << "SI\n";
+			piano->play2D("audios/si.wav", false);
+			break;
+		case 'k': // DO2
+			std::cout << "DO2\n";
+			piano->play2D("audios/do2.wav", false);
+			break;
+		case 'o': // DO#2
+			std::cout << "DO#2\n";
+			piano->play2D("audios/do#2.wav", false);
+			break;
+		case 'l': // RE2
+			std::cout << "RE2\n";
+			piano->play2D("audios/re2.wav", false);
+			break;
+		case 'p': // RE#2
+			std::cout << "re#2\n";
+			piano->play2D("audios/re#2.wav", false);
+			break;
+
+			// GESTIONE VISTA - Solo per testing
+
+		case 'z': 
+			height += 0.05;
+			glutPostRedisplay();
+			get_coords();
+			break;
+		case 'x':
+			height -= 0.05;
+			glutPostRedisplay();
+			get_coords();
+			break;
+		default:
+			break;
+		}
+	}
+
+}
+
+void movement(int key, int xx, int yy) {
+
+	float fraction = 0.1f;
+
+	switch (key) {
+	case GLUT_KEY_LEFT:
+		angle -= 0.01f;
+		lx = sin(angle);
+		lz = -cos(angle);
+		glutPostRedisplay();
+		get_coords();
+		break;
+	case GLUT_KEY_RIGHT:
+		angle += 0.01f;
+		lx = sin(angle);
+		lz = -cos(angle);
+		glutPostRedisplay();
+		get_coords();
+		break;
+	case GLUT_KEY_UP:
+		x += lx * fraction;
+		z += lz * fraction;
+		glutPostRedisplay();
+		get_coords();
+		break;
+	case GLUT_KEY_DOWN:
+		x -= lx * fraction;
+		z -= lz * fraction;
+		glutPostRedisplay();
+		get_coords();
+		break;
+	}
+}
+
+void mouse(int button, int state, int x, int y)
+{
+	//   x = (x - XRES / 2) * 2;
+	//   y = (y - YRES / 2) * 2;
+
+	switch (button) {
+	case GLUT_LEFT_BUTTON:
+		if (state == GLUT_DOWN) {
+			if (x > 500 && x < 660 && y>(YRES - 30 - pos_start) && y < (YRES - pos_start)) {   //start new game
+				menu = 0;
+				glutPostRedisplay();
+			}
+			if (x > 495 && x < 670 && y>(YRES - 30 - pos_diff) && y < (YRES - pos_diff)) {   //set difficulty
+				difficulty += 1;
+				if (difficulty == 4) {
+					difficulty = 1;
+				}
+				menu_display();
+			}
+		}
+		break;
+		/*   case GLUT_RIGHT_BUTTON:
+			   if (state == GLUT_DOWN) {
+				   y_o = 1.5;
+				   if (x > 0 && y > 0)
+					   y_o = -1.5;
+				   glutPostRedisplay();
+			   }
+			   break;*/
+
+	default:
+		break;
+
+	}
+}
+
+// ----------------------------------------------------------------------------
+int main(int argc, char** argv)
+{
+	struct aiLogStream stream;
+
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	//	glutInitWindowPosition(100,100);
+	glutInitWindowSize(XRES, YRES);
+	glutCreateWindow("Assimp - Very simple OpenGL sample");
+
+	glutDisplayFunc(display);
+	glutKeyboardFunc(keyboard);
+	glutSpecialFunc(movement);
+	glutMouseFunc(mouse);
+	glutReshapeFunc(reshape);
+
+	define_main_pitches();
+	create_song();
+
+	// get a handle to the predefined STDOUT log stream and attach
+	// it to the logging system. It will be active for all further
+	// calls to aiImportFile(Ex) and aiApplyPostProcessing.
+
+	stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, NULL);
+	aiAttachLogStream(&stream);
+
+	// ... exactly the same, but this stream will now write the
+	// log file to assimp_log.txt
+	stream = aiGetPredefinedLogStream(aiDefaultLogStream_FILE, "assimp_log.txt");
+	aiAttachLogStream(&stream);
+
+	// the model name can be specified on the command line. 
+
+	loadasset("../debug/models/room_2.obj");
+	//loadasset("../debug/models/piano.obj");
+
+	/*
+	 if(argc>=2)
+		loadasset( argv[1] );
+	 else
+	 {
+		fprintf(stderr,"usage: >>SimpleOpenGLTexturedLoader <modelpath\\modelname>");
+		exit(1);
+	}
+
+	*/
+
+	if (!InitGL())
+	{
+		fprintf(stderr, "Initialization failed");
+		return FALSE;
+	}
+
+	glutGet(GL_DEPTH_TEST);
+	glutMainLoop();
+
+	// cleanup - calling 'aiReleaseImport' is important, as the library 
+	// keeps internal resources until the scene is freed again. Not 
+	// doing so can cause severe resource leaking.
+	aiReleaseImport(scene);
+
+	// We added a log stream to the library, it's our job to disable it
+	// again. This will definitely release the last resources allocated
+	// by Assimp.
+	aiDetachAllLogStreams();
+	return 0;
+}
