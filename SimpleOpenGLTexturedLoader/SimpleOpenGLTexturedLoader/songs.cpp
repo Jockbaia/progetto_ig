@@ -1,4 +1,5 @@
 #include "songs.h"
+#include "controls.h"
 
 typedef struct n {
 	char key;
@@ -9,42 +10,42 @@ typedef struct n {
 typedef struct s {
 	//std::string name = "Twinkle twinkle little star";
 	float base_coord = 1;
-	float offset = 0.1;
+	float offset = 0.25;
 	nota_t* note = NULL;
 } song_t;
 
 nota_t DO, RE, MI, FA, SOL, LA, SI, pause;
 nota_t vett[50];
 int n = 0;
-float speed = -0.01;
+float speed = -0.0035;
 song_t ttls;
 
 
 void define_main_pitches() {
 	//do
 	DO.key = 'A';
-	DO.x = -0.12;
+	DO.x = -0.44;
 	//re
 	RE.key = 'S';
-	RE.x = -0.06;
+	RE.x = -0.28;
 	//mi
 	MI.key = 'D';
-	MI.x = 0;
+	MI.x = -0.12;
 	//fa
 	FA.key = 'F';
-	FA.x = 0.06;
+	FA.x = 0;
 	//sol
 	SOL.key = 'G';
 	SOL.x = 0.12;
 	//la
 	LA.key = 'H';
-	LA.x = 0.18;
+	LA.x = 0.28;
 	//si
 	SI.key = 'J';
-	SI.x = 0.24;
+	SI.x = 0.44;
 	//pause (fake)
 	pause.key = '_';
-	pause.x = 1;
+	pause.x = 3;
 
 }
 
@@ -106,26 +107,36 @@ void create_song() {
 	ttls.note = vett;
 }
 
+float min(float a, float b) {
+	if (a <= b) {
+		return a;
+	}
+	return b;
+}
 
-void play_song() {
+
+void play_song(/*song_t canzone*/) {
 	//glClear(GL_COLOR_BUFFER_BIT);
 
 	glScalef(1, 1, 1);
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(0.0, 1.0, 1.0);
 	glPushMatrix();
 	glLoadIdentity();
 	n = 0;
 	while (n < 48) {
-		if (ttls.base_coord + ttls.offset * n > 2)
-			break;
-
-		glTranslatef(ttls.note[n].x, ttls.base_coord + n * ttls.offset, -3);
-		glutSolidSphere(0.03, 4, 4);
-		glTranslatef(-ttls.note[n].x, -ttls.base_coord - n * ttls.offset, 3);
-		glPopMatrix();
+		/*if (ttls.base_coord + ttls.offset * n > 2)
+			break;*/
+		glTranslatef(ttls.note[n].x, ttls.base_coord + n * ttls.offset, -2.5);
+		glutSolidSphere(0.05, 4, 4);
+		glTranslatef(-ttls.note[n].x, -ttls.base_coord - n * ttls.offset, 2.5);
+		//glPopMatrix();
 		n++;
 	}
-	ttls.base_coord = ttls.base_coord + speed;
+	ttls.base_coord = ttls.base_coord + speed * difficulty;
+	if (ttls.base_coord <= -12.8) {
+		menu = 1;
+		ttls.base_coord = 1;
+	}
 	/*while (n < 48) {
 		glTranslatef(ttls.note[n].x, -1 + n * ttls.offset, -3);
 		glutSolidSphere(0.03, 4, 4);

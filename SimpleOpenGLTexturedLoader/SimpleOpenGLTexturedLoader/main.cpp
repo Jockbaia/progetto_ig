@@ -91,7 +91,7 @@ void show_piano(void) {
 	// angle = 28.31;
 
 	//gluLookAt(x, height, z, x + lx, 1.0f, z + lz, 0.0f, 1.0f, 0.0f);
-	gluLookAt(-6.8f, 0.7f, 1.f, -6.8f, -0.3f, 5, 0, 1, 0);
+	gluLookAt(-7.45f, 0, 7.5f, -7.45f, -2.f, 10, 0, 1, 0);
 
 	// scale the whole asset to fit into our view frustum 
 	 tmp = scene_max.x - scene_min.x;
@@ -100,7 +100,7 @@ void show_piano(void) {
 	 tmp = 1.f / tmp;
 	 //glScalef(tmp, tmp, tmp);
 
-	glScalef(4,4,4);
+	glScalef(5,5,5);
 
 	// center the model
 	glTranslatef(-scene_center.x, -scene_center.y, -scene_center.z);
@@ -146,10 +146,18 @@ void menu_display(void)
 	glPushMatrix();
 	glLoadIdentity();
 
+	int diff = 2;
+	if (difficulty == 1.0) {
+		diff = 1;
+	}
+	if (difficulty == 2.0) {
+		diff = 3;
+	}
+
 	char text_row_3[30] = "";
 	std::string text_row_1 = "W E L C O M E";
 	std::string text_row_2 = "Start new game";
-	sprintf(text_row_3, "Select difficulty: %d", difficulty);
+	sprintf(text_row_3, "Select difficulty: %d", diff);
 	std::string text_row_4 = "(1=EASY, 2=MEDIUM, 3=HARD)";
 
 	pos_titolo = 500;
@@ -185,9 +193,9 @@ void mouse(int button, int state, int x, int y)
 				glutPostRedisplay();
 			}
 			if (x > 495 && x < 670 && y>(YRES - 30 - pos_diff) && y < (YRES - pos_diff)) {   //set difficulty
-				difficulty += 1;
-				if (difficulty == 4) {
-					difficulty = 1;
+				difficulty = difficulty + 0.5;
+				if (difficulty == 2.5) {
+					difficulty = 1.0;
 				}
 				menu_display();
 			}
