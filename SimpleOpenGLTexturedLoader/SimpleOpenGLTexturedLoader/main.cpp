@@ -272,8 +272,9 @@ int main(int argc, char** argv)
 
 	// the model name can be specified on the command line. 
 
-	loadasset("../debug/models/room_2.obj");
-	//loadasset("../debug/models/piano.obj");
+	loadasset("../debug/models/stanza2.obj");
+	// loadasset("../debug/models/room_2.obj");
+	// loadasset("../debug/models/piano.obj");
 
 	/*
 	 if(argc>=2)
