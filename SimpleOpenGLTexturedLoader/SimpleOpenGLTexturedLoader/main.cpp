@@ -5,6 +5,7 @@
 
 void* font1 = GLUT_BITMAP_TIMES_ROMAN_24;	// Font schermata menu
 void* font2 = GLUT_BITMAP_HELVETICA_18;
+int song = 1;
 
 void do_motion(void)
 {
@@ -256,7 +257,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(reshape);
 
 	define_main_pitches();
-	create_song();
+	create_song(song);
 
 	// get a handle to the predefined STDOUT log stream and attach
 	// it to the logging system. It will be active for all further

@@ -15,11 +15,13 @@ typedef struct s {
 } song_t;
 
 nota_t DO, RE, MI, FA, SOL, LA, SI, pause;
-nota_t vett[50];
+nota_t vett[100];
 int n = 0;
 float speed = -0.0035;
 song_t ttls;
 
+int totalNotes;
+int songPrecision;
 
 void define_main_pitches() {
 	//do
@@ -49,8 +51,67 @@ void define_main_pitches() {
 
 }
 
-void create_song() {
-	//create ttls
+void create_song(int song) {
+	if (song == 1) twinkleTwinkle();
+	else if (song == 2) fraMartino();
+}
+
+
+void play_song() {
+	//glClear(GL_COLOR_BUFFER_BIT);
+
+	glScalef(1, 1, 1);
+	glColor3f(0.0, 1.0, 1.0);
+	glPushMatrix();
+	glLoadIdentity();
+	n = 0;
+
+	while (n < totalNotes) {
+		/*if (ttls.base_coord + ttls.offset * n > 2)
+			break;*/
+		glTranslatef(ttls.note[n].x, ttls.base_coord + n * ttls.offset, -2.5);
+		glutSolidSphere(0.05, 4, 4);
+		glTranslatef(-ttls.note[n].x, -ttls.base_coord - n * ttls.offset, 2.5);
+		//glPopMatrix();
+		n++;
+	}
+	ttls.base_coord = ttls.base_coord + speed * songPrecision * difficulty;
+
+	if (ttls.base_coord <= -12.8) {
+		// if (ttls.base_coord <= -1 * (ttls.base_coord + ttls.offset * totalNotes) (????) {
+		// forse bisogna anche moltiplicare per songPrecision
+		menu = 1;
+		ttls.base_coord = 1;
+	}
+
+	/*while (n < 48) {
+		glTranslatef(ttls.note[n].x, -1 + n * ttls.offset, -3);
+		glutSolidSphere(0.03, 4, 4);
+		glTranslatef(-ttls.note[n].x, +1 - n * ttls.offset, 3);
+		glPopMatrix();
+		n++;
+	}*/
+	glutSwapBuffers();
+	glutPostRedisplay();
+}
+
+float min(float a, float b) {
+	if (a <= b) {
+		return a;
+	}
+	return b;
+}
+
+
+////////////////
+// CANZONIERE //
+////////////////
+
+void twinkleTwinkle(void) {
+
+	totalNotes = 48;
+	songPrecision = 1;
+
 	vett[0] = DO;
 	vett[1] = DO;
 	vett[2] = SOL;
@@ -107,43 +168,83 @@ void create_song() {
 	ttls.note = vett;
 }
 
-float min(float a, float b) {
-	if (a <= b) {
-		return a;
-	}
-	return b;
+void fraMartino(void) {
+
+	totalNotes = 64;
+	songPrecision = 4;
+
+	vett[0] = DO;
+	vett[1] = pause;
+	vett[2] = RE;
+	vett[3] = pause;
+	vett[4] = MI;
+	vett[5] = pause;
+	vett[6] = DO;
+	vett[7] = pause;
+	vett[8] = DO;
+	vett[9] = pause;
+	vett[10] = RE;
+	vett[11] = pause;
+	vett[12] = MI;
+	vett[13] = pause;
+	vett[14] = DO;
+	vett[15] = pause;
+
+	vett[16] = MI;
+	vett[17] = pause;
+	vett[18] = FA;
+	vett[19] = pause;
+	vett[20] = SOL;
+	vett[21] = pause;
+	vett[22] = pause;
+	vett[23] = pause;
+	vett[24] = MI;
+	vett[25] = pause;
+	vett[26] = FA;
+	vett[27] = pause;
+	vett[28] = SOL;
+	vett[29] = pause;
+	vett[30] = pause;
+	vett[31] = pause;
+
+	vett[32] = SOL;
+	vett[33] = LA;
+	vett[34] = SOL;
+	vett[35] = FA;
+	vett[36] = MI;
+	vett[37] = pause;
+	vett[38] = DO;
+	vett[39] = pause;
+
+	vett[40] = SOL;
+	vett[41] = LA;
+	vett[42] = SOL;
+	vett[43] = FA;
+	vett[44] = MI;
+	vett[45] = pause;
+	vett[46] = DO;
+	vett[47] = pause;
+
+	vett[48] = RE;
+	vett[49] = pause;
+	vett[50] = SOL;
+	vett[51] = pause;
+	vett[52] = DO;
+	vett[53] = pause;
+	vett[54] = pause;
+	vett[55] = pause;
+
+	vett[56] = RE;
+	vett[57] = pause;
+	vett[58] = SOL;
+	vett[59] = pause;
+	vett[60] = DO;
+	vett[61] = pause;
+	vett[62] = pause;
+	vett[63] = pause;
+
+	ttls.note = vett;
 }
 
 
-void play_song(/*song_t canzone*/) {
-	//glClear(GL_COLOR_BUFFER_BIT);
 
-	glScalef(1, 1, 1);
-	glColor3f(0.0, 1.0, 1.0);
-	glPushMatrix();
-	glLoadIdentity();
-	n = 0;
-	while (n < 48) {
-		/*if (ttls.base_coord + ttls.offset * n > 2)
-			break;*/
-		glTranslatef(ttls.note[n].x, ttls.base_coord + n * ttls.offset, -2.5);
-		glutSolidSphere(0.05, 4, 4);
-		glTranslatef(-ttls.note[n].x, -ttls.base_coord - n * ttls.offset, 2.5);
-		//glPopMatrix();
-		n++;
-	}
-	ttls.base_coord = ttls.base_coord + speed * difficulty;
-	if (ttls.base_coord <= -12.8) {
-		menu = 1;
-		ttls.base_coord = 1;
-	}
-	/*while (n < 48) {
-		glTranslatef(ttls.note[n].x, -1 + n * ttls.offset, -3);
-		glutSolidSphere(0.03, 4, 4);
-		glTranslatef(-ttls.note[n].x, +1 - n * ttls.offset, 3);
-		glPopMatrix();
-		n++;
-	}*/
-	glutSwapBuffers();
-	glutPostRedisplay();
-}
