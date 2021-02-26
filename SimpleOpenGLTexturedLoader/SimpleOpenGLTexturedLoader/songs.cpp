@@ -1,5 +1,6 @@
 #include "songs.h"
 #include "controls.h"
+#include <iostream>
 
 typedef struct n {
 	char key;
@@ -11,39 +12,40 @@ typedef struct s {
 	//std::string name = "Twinkle twinkle little star";
 	float base_coord = 1;
 	float offset = 0.25;
+	float end;
 	nota_t* note = NULL;
 } song_t;
 
 nota_t DO, RE, MI, FA, SOL, LA, SI, pause;
 nota_t vett[100];
-int n = 0;
+int n = 0, next_to_play = 0, consecutive = 0;
 float speed = -0.0035;
 song_t ttls;
 
 int totalNotes;
-int songPrecision;
+float songPrecision;
 
 void define_main_pitches() {
 	//do
-	DO.key = 'A';
+	DO.key = 'a';
 	DO.x = -0.44;
 	//re
-	RE.key = 'S';
+	RE.key = 's';
 	RE.x = -0.28;
 	//mi
-	MI.key = 'D';
+	MI.key = 'd';
 	MI.x = -0.12;
 	//fa
-	FA.key = 'F';
+	FA.key = 'f';
 	FA.x = 0;
 	//sol
-	SOL.key = 'G';
+	SOL.key = 'g';
 	SOL.x = 0.12;
 	//la
-	LA.key = 'H';
+	LA.key = 'h';
 	LA.x = 0.28;
 	//si
-	SI.key = 'J';
+	SI.key = 'j';
 	SI.x = 0.44;
 	//pause (fake)
 	pause.key = '_';
@@ -75,13 +77,28 @@ void play_song() {
 		//glPopMatrix();
 		n++;
 	}
-	ttls.base_coord = ttls.base_coord + speed * songPrecision * difficulty;
+	switch (difficulty) {
+	case 1:
+		ttls.base_coord = ttls.base_coord + speed * songPrecision * 1.3;
+		break;
+	case 2:
+		ttls.base_coord = ttls.base_coord + speed * songPrecision * 1.6;
+		break;
+	case 3:
+		ttls.base_coord = ttls.base_coord + speed * songPrecision * 2.2;
+		break;
+	default:
+		break;
+	}
 
-	if (ttls.base_coord <= -12.8) {
-		// if (ttls.base_coord <= -1 * (ttls.base_coord + ttls.offset * totalNotes) (????) {
-		// forse bisogna anche moltiplicare per songPrecision
+	if (ttls.base_coord <= ttls.end) {	//canzone finita
 		menu = 1;
+		sprintf_s(message, "");
 		ttls.base_coord = 1;
+		next_to_play = 0;
+		consecutive = 0;
+		bonus = 1;
+		punti = 0;
 	}
 
 	/*while (n < 48) {
@@ -95,12 +112,53 @@ void play_song() {
 	glutPostRedisplay();
 }
 
-float min(float a, float b) {
+int correct_pitch(unsigned char key) {
+	//AGGIUNGI CONTROLLO SU POSIZIONE NOTA COMPRESA TRA LE LINEE 
+	int res;
+	float val;
+	val = ttls.base_coord + ttls.offset * next_to_play;
+	if (ttls.note[next_to_play].key == key) {
+		if (val <= -0.1 && val >= -0.5) {	//Nota corretta premuta al momento giusto (dà bonus)
+			consecutive++;
+			if (consecutive == 5) {	//bonus accumulato dopo n note consecutive giuste
+				consecutive = 0;
+				bonus++;
+			}
+			next_to_play++;
+			res = 1;
+		}
+		else if (val < -0.5) {	//Nota corretta suonata troppo tardi (azzera bonus ma non dà malus)
+			consecutive = 0;
+			bonus = 1;
+			next_to_play++;
+			res = 3;
+		}
+		else if (val > -0.1) {	//Nota corretta suonata troppo presto (azzera bonus ma non dà malus)
+			consecutive = 0;
+			bonus = 1;
+			next_to_play++;
+			res = 2;
+		}
+
+	}
+	else {	//Nota sbagliata, passa a nota successiva (azzera bonus e dà malus)
+		consecutive = 0;
+		bonus = 1;
+		next_to_play++;
+		res = 0;
+	}
+	while (ttls.note[next_to_play].key == '_') {
+		next_to_play++;
+	}
+	return res;
+}
+
+/*float min(float a, float b) {
 	if (a <= b) {
 		return a;
 	}
 	return b;
-}
+}*/
 
 
 ////////////////
@@ -166,12 +224,13 @@ void twinkleTwinkle(void) {
 	vett[46] = DO;
 	vett[47] = pause;
 	ttls.note = vett;
+	ttls.end = -1 * (ttls.base_coord + totalNotes * ttls.offset);
 }
 
 void fraMartino(void) {
 
 	totalNotes = 64;
-	songPrecision = 4;
+	songPrecision = 2.5;
 
 	vett[0] = DO;
 	vett[1] = pause;
@@ -244,6 +303,7 @@ void fraMartino(void) {
 	vett[63] = pause;
 
 	ttls.note = vett;
+	ttls.end = -1 * (ttls.base_coord + totalNotes * ttls.offset);
 }
 
 

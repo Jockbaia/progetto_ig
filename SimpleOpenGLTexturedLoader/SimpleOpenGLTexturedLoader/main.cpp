@@ -85,7 +85,7 @@ void show_room(void) {
 void show_piano(void) {
 	float tmp;
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -125,18 +125,17 @@ void show_piano(void) {
 	glColor3f(1.0, 0.0, 1.0);
 	glPushMatrix();
 	glLoadIdentity();
-	glTranslatef(0.05,-0.4,-3);
-	glutSolidSphere(0.04, 4, 4);
+	glTranslatef(0,-0.5,-2.5);
+	glutSolidSphere(0.02, 8, 4);
 	glPopMatrix();*/
 
 	play_song();
-	//glutSwapBuffers();
+//	glutSwapBuffers();
 	//glutPostRedisplay();
 }
 
 void menu_display(void)
 {
-
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -147,18 +146,18 @@ void menu_display(void)
 	glPushMatrix();
 	glLoadIdentity();
 
-	int diff = 2;
+/*	int diff = 2;
 	if (difficulty == 1.0) {
 		diff = 1;
 	}
 	if (difficulty == 2.0) {
 		diff = 3;
-	}
+	}*/
 
 	char text_row_3[30] = "";
 	std::string text_row_1 = "W E L C O M E";
 	std::string text_row_2 = "Start new game";
-	sprintf(text_row_3, "Select difficulty: %d", diff);
+	sprintf_s(text_row_3, "Select difficulty: %d", difficulty);
 	std::string text_row_4 = "(1=EASY, 2=MEDIUM, 3=HARD)";
 
 	pos_titolo = 500;
@@ -178,7 +177,42 @@ void menu_display(void)
 	glutSwapBuffers();
 }
 
+void game_display(void)
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(1.0, XRES, 1.0, YRES);
 
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	char points[12] = "";
+	sprintf_s(points, "Score: %d", punti);
+
+	output(20, 650, points, font1);
+	output(XRES / 2 - 10, YRES / 2 + 50, message, font2);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+
+	glColor3f(1, 0, 1);
+	glLineWidth(2);
+	glBegin(GL_LINES);
+	glVertex3f(-2, -0.15, -2.6);
+	glVertex3f(2, -0.15, -2.6);
+	glVertex3f(2, -0.5, -2.6);
+	glVertex3f(-2, -0.5, -2.6);
+	glEnd();
+
+
+	show_piano();
+	glutSwapBuffers();
+}
 
 
 void mouse(int button, int state, int x, int y)
@@ -194,9 +228,9 @@ void mouse(int button, int state, int x, int y)
 				glutPostRedisplay();
 			}
 			if (x > 495 && x < 670 && y>(YRES - 30 - pos_diff) && y < (YRES - pos_diff)) {   //set difficulty
-				difficulty = difficulty + 0.5;
-				if (difficulty == 2.5) {
-					difficulty = 1.0;
+				difficulty = difficulty + 1;
+				if (difficulty == 4) {
+					difficulty = 1;
 				}
 				menu_display();
 			}
@@ -234,6 +268,7 @@ void display(void)
 		show_room();
 	}
 	else {
+		game_display();
 		show_piano();
 //		play_song();
 	}

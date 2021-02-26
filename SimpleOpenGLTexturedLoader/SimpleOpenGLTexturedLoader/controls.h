@@ -14,8 +14,10 @@ extern ISoundEngine* piano;
 extern double eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz;
 extern float angle_start, lx, lz, x, z, angle, height;
 extern char menu;
-extern float difficulty;
+extern int difficulty;
 extern short int pos_titolo, pos_start, pos_diff;
+extern int punti, bonus;
+extern char message[10];
 
 void keyboard(unsigned char key, int x, int y);
 void movement(int key, int xx, int yy);
