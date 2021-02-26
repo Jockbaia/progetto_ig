@@ -12,4 +12,5 @@ int correct_pitch(unsigned char key);
 // SONGS
 void twinkleTwinkle(void);
 void fraMartino(void);
+void ohSusanna(void);
 

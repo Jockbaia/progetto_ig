@@ -5,7 +5,7 @@
 
 void* font1 = GLUT_BITMAP_TIMES_ROMAN_24;	// Font schermata menu
 void* font2 = GLUT_BITMAP_HELVETICA_18;
-int song = 1;
+int song = 3;
 
 void do_motion(void)
 {
