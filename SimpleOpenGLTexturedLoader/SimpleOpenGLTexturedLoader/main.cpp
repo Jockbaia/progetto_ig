@@ -159,14 +159,29 @@ void menu_display(void)
 	std::string text_row_2 = "Start new game";
 	sprintf_s(text_row_3, "Select difficulty: %d", difficulty);
 	std::string text_row_4 = "(1=EASY, 2=MEDIUM, 3=HARD)";
-
-	pos_titolo = 500;
-	output(500, pos_titolo, text_row_1, font1);
-	pos_start = 150;
-	output(500, pos_start, text_row_2, font2);
-	pos_diff = 100;
-	output(495, pos_diff, text_row_3, font2);
-	output(440, pos_diff - 50, text_row_4, font2);
+	
+	if (menu == 1) {
+		pos_titolo = 550;
+		output(500, pos_titolo, text_row_1, font1);
+		pos_start = 220;
+		output(500, pos_start, text_row_2, font2);
+		pos_sel = 160;
+		output(510, pos_sel, "Select song", font2);
+		pos_diff = 100;
+		output(495, pos_diff, text_row_3, font2);
+		output(440, pos_diff - 50, text_row_4, font2);
+	}
+	else if (menu == 2) {
+		pos_titolo = 600;
+		pos_start = 480;
+		pos_sel = 360;
+		pos_diff = 240;
+		output(450, pos_titolo, "Twinkle twinkle little star", font2);
+		output(500, pos_start, "Fra' Martino", font2);
+		output(500, pos_sel, "Oh Susanna", font2);
+		output(500, pos_diff, "<Quarta canzone>", font2);
+	}
+	
 
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
@@ -222,7 +237,7 @@ void mouse(int button, int state, int x, int y)
 
 	switch (button) {
 	case GLUT_LEFT_BUTTON:
-		if (state == GLUT_DOWN) {
+		if (state == GLUT_DOWN && menu == 1) {
 			if (x > 500 && x < 660 && y>(YRES - 30 - pos_start) && y < (YRES - pos_start)) {   //start new game
 				menu = 0;
 				glutPostRedisplay();
@@ -234,6 +249,34 @@ void mouse(int button, int state, int x, int y)
 				}
 				menu_display();
 			}
+			if (x > 510 && x<650 && y>(YRES - 30 - pos_sel) && y < (YRES - pos_sel)) {	//show song menu
+				menu = 2;
+				glutPostRedisplay();
+			}
+		}
+		else if (state == GLUT_DOWN && menu == 2) {
+			if (x > 450 && x<650 && y>(YRES - 30 - pos_titolo) && y < (YRES - pos_titolo)) {
+				song = 1;
+				create_song(song);
+
+			}
+			if (x > 500 && x<600 && y>(YRES - 30 - pos_start) && y < (YRES - pos_start)) {
+				song = 2;
+				create_song(song);
+
+			}
+			if (x > 500 && x<600 && y>(YRES - 30 - pos_sel) && y < (YRES - pos_sel)) {
+				song = 3;
+				create_song(song);
+
+			}
+			if (x > 500 && x<600 && y>(YRES - 30 - pos_diff) && y < (YRES - pos_diff)) {
+				song = 4;
+				create_song(song);
+
+			}
+			menu = 1;
+			glutPostRedisplay();
 		}
 		break;
 		/*   case GLUT_RIGHT_BUTTON:
@@ -263,7 +306,7 @@ void display(void)
 	// 1 = Main Menù
 	// 0 = Free-roaming / game
 
-	if (menu == 1) {
+	if (menu != 0) {
 		menu_display();
 		show_room();
 	}

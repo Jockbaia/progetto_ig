@@ -11,7 +11,7 @@ typedef struct n {
 typedef struct s {
 	//std::string name = "Twinkle twinkle little star";
 	float base_coord = 1;
-	float offset = 0.25;
+	float offset;
 	float end;
 	nota_t* note = NULL;
 } song_t;
@@ -114,9 +114,12 @@ void play_song() {
 }
 
 int correct_pitch(unsigned char key) {
-	//AGGIUNGI CONTROLLO SU POSIZIONE NOTA COMPRESA TRA LE LINEE 
 	int res;
 	float val;
+
+	if (ttls.note[next_to_play].key == '_') { //per ohSusanna che inizia con pausa
+		next_to_play++;
+	}
 	val = ttls.base_coord + ttls.offset * next_to_play;
 	if (ttls.note[next_to_play].key == key) {
 		if (val <= -0.1 && val >= -0.5) {	//Nota corretta premuta al momento giusto (dà bonus)
@@ -225,6 +228,7 @@ void twinkleTwinkle(void) {
 	vett[46] = DO;
 	vett[47] = pause;
 	ttls.note = vett;
+	ttls.offset = 0.25;
 	ttls.end = -1 * (ttls.base_coord + totalNotes * ttls.offset);
 }
 
@@ -304,13 +308,15 @@ void fraMartino(void) {
 	vett[63] = pause;
 
 	ttls.note = vett;
+	ttls.offset = 0.2;
 	ttls.end = -1 * (ttls.base_coord + totalNotes * ttls.offset);
 }
 
 void ohSusanna(void) {
 
 	totalNotes = 381;
-	songPrecision = 18;
+	//songPrecision = 18;
+	songPrecision = 2;
 
 	vett[0] = pause;
 	vett[1] = DO;
@@ -698,6 +704,7 @@ void ohSusanna(void) {
 	vett[380] = pause;
 
 	ttls.note = vett;
+	ttls.offset = 0.1;
 	ttls.end = -1 * (ttls.base_coord + totalNotes * ttls.offset);
 }
 

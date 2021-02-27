@@ -15,7 +15,7 @@ extern double eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz;
 extern float angle_start, lx, lz, x, z, angle, height;
 extern char menu;
 extern int difficulty;
-extern short int pos_titolo, pos_start, pos_diff;
+extern short int pos_titolo, pos_start, pos_diff, pos_sel;
 extern int punti, bonus;
 extern char message[10];
 
