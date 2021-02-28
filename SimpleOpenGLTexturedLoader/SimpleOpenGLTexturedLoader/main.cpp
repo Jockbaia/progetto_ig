@@ -2,6 +2,7 @@
 #include "songs.h"
 #include "controls.h"
 #include <Windows.h>
+#include <iostream>
 
 void* font1 = GLUT_BITMAP_TIMES_ROMAN_24;	// Font schermata menu
 void* font2 = GLUT_BITMAP_HELVETICA_18;
@@ -91,7 +92,7 @@ void show_piano(void) {
 
 	// angle = 28.31;
 
-	//gluLookAt(x, height, z, x + lx, 1.0f, z + lz, 0.0f, 1.0f, 0.0f);
+	// gluLookAt(x, height, z, x + lx, 1.0f, z + lz, 0.0f, 1.0f, 0.0f);
 	gluLookAt(-7.45f, 0, 7.5f, -7.45f, -2.f, 10, 0, 1, 0);
 
 	// scale the whole asset to fit into our view frustum 
@@ -134,6 +135,79 @@ void show_piano(void) {
 	//glutPostRedisplay();
 }
 
+void show_ipad(void) {
+	float tmp;
+
+	x = -5.12236, z = 11.2895, lx = 0.261272, lz = 0.965265;
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(x, 4.25, z, x + lx, 1.0f, z + lz, 0.0f, 1.0f, 0.0f);
+
+	// scale the whole asset to fit into our view frustum 
+	tmp = scene_max.x - scene_min.x;
+	tmp = aisgl_max(scene_max.y - scene_min.y, tmp);
+	tmp = aisgl_max(scene_max.z - scene_min.z, tmp);
+	tmp = 1.f / tmp;
+
+	glScalef(5, 5, 5);
+
+	// center the model
+	glTranslatef(-scene_center.x, -scene_center.y, -scene_center.z);
+
+	// if the display list has not been made yet, create a new one and
+	// fill it with scene contents
+	if (scene_list == 0) {
+		scene_list = glGenLists(1);
+		glNewList(scene_list, GL_COMPILE);
+		// now begin at the root node of the imported data and traverse
+		// the scenegraph by multiplying subsequent local transforms
+		// together on GL's matrix stack.
+		recursive_render(scene, scene->mRootNode, 1.0);
+		glEndList();
+	}
+
+	glCallList(scene_list);
+
+}
+
+void show_instructions(void) {
+	float tmp;
+	x = -10.5448, z = 6.33886, lx = -0.233497, lz = 0.972358;
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(x, 1.8, z, x + lx, 1.0f, z + lz, 0.0f, 1.0f, 0.0f);
+	
+	
+
+	// scale the whole asset to fit into our view frustum 
+	tmp = scene_max.x - scene_min.x;
+	tmp = aisgl_max(scene_max.y - scene_min.y, tmp);
+	tmp = aisgl_max(scene_max.z - scene_min.z, tmp);
+	tmp = 1.f / tmp;
+
+	glScalef(5, 5, 5);
+
+	// center the model
+	glTranslatef(-scene_center.x, -scene_center.y, -scene_center.z);
+
+	// if the display list has not been made yet, create a new one and
+	// fill it with scene contents
+	if (scene_list == 0) {
+		scene_list = glGenLists(1);
+		glNewList(scene_list, GL_COMPILE);
+		// now begin at the root node of the imported data and traverse
+		// the scenegraph by multiplying subsequent local transforms
+		// together on GL's matrix stack.
+		recursive_render(scene, scene->mRootNode, 1.0);
+		glEndList();
+	}
+
+	glCallList(scene_list);
+
+}
+
 void menu_display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -158,7 +232,7 @@ void menu_display(void)
 	std::string text_row_1 = "W E L C O M E";
 	std::string text_row_2 = "Start new game";
 	sprintf_s(text_row_3, "Select difficulty: %d", difficulty);
-	std::string text_row_4 = "(1=EASY, 2=MEDIUM, 3=HARD)";
+	std::string text_row_4 = "How to Play";
 	
 	if (menu == 1) {
 		pos_titolo = 550;
@@ -169,17 +243,17 @@ void menu_display(void)
 		output(510, pos_sel, "Select song", font2);
 		pos_diff = 100;
 		output(495, pos_diff, text_row_3, font2);
-		output(440, pos_diff - 50, text_row_4, font2);
+		output(515, pos_diff - 55, text_row_4, font2);
 	}
 	else if (menu == 2) {
-		pos_titolo = 600;
-		pos_start = 480;
-		pos_sel = 360;
-		pos_diff = 240;
-		output(450, pos_titolo, "Twinkle twinkle little star", font2);
-		output(500, pos_start, "Fra' Martino", font2);
-		output(500, pos_sel, "Oh Susanna", font2);
-		output(500, pos_diff, "<Quarta canzone>", font2);
+		pos_titolo = 525;
+		pos_start = 460;
+		pos_sel = 390;
+		pos_diff = 315;
+		output(670, pos_titolo,	"                          ", font2);
+		output(670, pos_start,	"                          ", font2);
+		output(670, pos_sel,	"                          ", font2);
+		output(670, pos_diff,	"                          ", font2);
 	}
 	
 
@@ -188,7 +262,10 @@ void menu_display(void)
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 
-	show_room();
+	if (menu == 1) show_room();
+	else if (menu == 2) show_ipad();
+	else if (menu == 3) show_instructions();
+
 	glutSwapBuffers();
 }
 
@@ -239,10 +316,14 @@ void mouse(int button, int state, int x, int y)
 	case GLUT_LEFT_BUTTON:
 		if (state == GLUT_DOWN && menu == 1) {
 			if (x > 500 && x < 660 && y>(YRES - 30 - pos_start) && y < (YRES - pos_start)) {   //start new game
+				std::cout << "CLICK! Inizia a giocare\n";
+				piano->play2D("audios/click.wav", false);
 				menu = 0;
 				glutPostRedisplay();
 			}
 			if (x > 495 && x < 670 && y>(YRES - 30 - pos_diff) && y < (YRES - pos_diff)) {   //set difficulty
+				std::cout << "CLICK! Cambio Difficoltà\n";
+				piano->play2D("audios/click.wav", false);
 				difficulty = difficulty + 1;
 				if (difficulty == 4) {
 					difficulty = 1;
@@ -250,32 +331,61 @@ void mouse(int button, int state, int x, int y)
 				menu_display();
 			}
 			if (x > 510 && x<650 && y>(YRES - 30 - pos_sel) && y < (YRES - pos_sel)) {	//show song menu
+				std::cout << "CLICK! Menù Canzoni\n";
+				piano->play2D("audios/click.wav", false);
 				menu = 2;
+				glutPostRedisplay();
+			}
+
+			if (x > 515 && x<650 && y>(YRES - pos_diff + 45) && y < (YRES - pos_diff + 100)) {	//show instructions
+				std::cout << "CLICK! Istruzioni di Gioco\n";
+				piano->play2D("audios/paper1.wav", false);
+				menu = 3;
 				glutPostRedisplay();
 			}
 		}
 		else if (state == GLUT_DOWN && menu == 2) {
-			if (x > 450 && x<650 && y>(YRES - 30 - pos_titolo) && y < (YRES - pos_titolo)) {
+
+			if (x > 670 && x<870 && y>(YRES - 30 - pos_titolo) && y < (YRES - pos_titolo)) {
+				std::cout << "SONG 1 selected\n";
+				piano->play2D("audios/tap.wav", false);
 				song = 1;
 				create_song(song);
 
 			}
-			if (x > 500 && x<600 && y>(YRES - 30 - pos_start) && y < (YRES - pos_start)) {
+			if (x > 670 && x<870 && y>(YRES - 30 - pos_start) && y < (YRES - pos_start)) {
+				std::cout << "SONG 2 selected\n";
+				piano->play2D("audios/tap.wav", false);
 				song = 2;
 				create_song(song);
 
 			}
-			if (x > 500 && x<600 && y>(YRES - 30 - pos_sel) && y < (YRES - pos_sel)) {
+			if (x > 670 && x<870 && y>(YRES - 30 - pos_sel) && y < (YRES - pos_sel)) {
+				std::cout << "SONG 3 selected\n";
+				piano->play2D("audios/tap.wav", false);
 				song = 3;
 				create_song(song);
 
 			}
-			if (x > 500 && x<600 && y>(YRES - 30 - pos_diff) && y < (YRES - pos_diff)) {
+			if (x > 670 && x<870 && y>(YRES - 30 - pos_diff) && y < (YRES - pos_diff)) {
+				std::cout << "SONG 4 selected\n";
+				piano->play2D("audios/tap.wav", false);
 				song = 4;
 				create_song(song);
 
 			}
 			menu = 1;
+			glutPostRedisplay();
+		}
+		else if (state == GLUT_DOWN && menu == 3) {
+
+			if (x > 0 && x<XRES && y>0 && y < YRES) {
+				std::cout << "Ritorno al menù principale\n";
+				piano->play2D("audios/paper2.wav", false);
+				menu = 1;
+			}
+			
+			
 			glutPostRedisplay();
 		}
 		break;
@@ -304,16 +414,30 @@ void display(void)
 
 	// Display according to the flag:
 	// 1 = Main Menù
+	// 2 = Song Selection
 	// 0 = Free-roaming / game
+	
+	
 
-	if (menu != 0) {
+	if (menu == 1) {
+		maintheme(1);
 		menu_display();
 		show_room();
 	}
+	else if (menu == 2) {
+		maintheme(1);
+		menu_display();
+		show_ipad();
+	}
+	else if (menu == 3) {
+		maintheme(1);
+		menu_display();
+		show_instructions();
+	}
 	else {
+		maintheme(0);
 		game_display();
 		show_piano();
-//		play_song();
 	}
 }
 
@@ -351,7 +475,8 @@ int main(int argc, char** argv)
 
 	// the model name can be specified on the command line. 
 
-	loadasset("../debug/models/stanza2.obj");
+	loadasset("../debug/models/stanza46.obj");
+	// loadasset("../debug/models/stanza2.obj");
 	// loadasset("../debug/models/room_2.obj");
 	// loadasset("../debug/models/piano.obj");
 

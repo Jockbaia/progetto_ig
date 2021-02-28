@@ -16,6 +16,8 @@ int punti = 0, bonus = 1;
 short int pos_titolo, pos_start, pos_diff, pos_sel;
 char message[10] = "";
 ISoundEngine* piano = createIrrKlangDevice();
+ISoundEngine* theme = createIrrKlangDevice();
+int isPlaying = 0;
 
 void output(int x, int y, std::string str)
 {
@@ -216,4 +218,18 @@ void movement(int key, int xx, int yy) {
 void get_coords(void) {
 	std::cout << "gluLookAt(" << x << ", " << height << ", " << z << ", " << x + lx << ", centery, " << x + lz << ", " << upx << ", " << upy << ", " << upz << ");\n"
 		<< "X " << x << " | Z " << z << " | LX " << lx << " | LZ " << lz << "| ANGLE " << angle << "\n";
+}
+
+void maintheme(int flag) {
+	if (flag) {
+		if (isPlaying == 0) {
+			theme->play2D("audios/main.wav", false);
+		}
+		isPlaying++;
+	}
+	if (!flag && isPlaying) {
+		theme->stopAllSounds();
+		isPlaying = 0;
+	}
+	
 }

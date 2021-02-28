@@ -8,6 +8,7 @@
 //// LIBRERIA SONORA irrKlang
 using namespace irrklang;
 extern ISoundEngine* piano;
+extern ISoundEngine* theme;
 
 /// MENU COORDS
 // Le variabili sono dichiarate in controls.cpp
@@ -22,3 +23,4 @@ extern char message[10];
 void keyboard(unsigned char key, int x, int y);
 void movement(int key, int xx, int yy);
 void get_coords(void);
+void maintheme(int flag);

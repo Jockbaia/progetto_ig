@@ -100,6 +100,7 @@ void play_song() {
 		consecutive = 0;
 		bonus = 1;
 		punti = 0;
+		piano->play2D("audios/applause.wav", false);
 	}
 
 	/*while (n < 48) {

@@ -1,25 +1,25 @@
-Info,  T25212: Load ../debug/models/stanza2.obj
-Info,  T25212: Found a matching importer for this file format
-Info,  T25212: Import root directory is '../debug/models\'
-Error, T25212: OBJ/MTL: Unexpected illumination model (0-2 recognized)
+Info,  T31124: Load ../debug/models/stanza46.obj
+Info,  T31124: Found a matching importer for this file format
+Info,  T31124: Import root directory is '../debug/models\'
+Error, T31124: OBJ/MTL: Unexpected illumination model (0-2 recognized)
 Skipping one or more lines with the same contents
-Info,  T25212: Entering post processing pipeline
-Info,  T25212: RemoveRedundantMatsProcess finished. 5 redundant and 1 unused materials
-Warn,  T25212: Found 20 degenerated primitives
-Warn,  T25212: Found 7 degenerated primitives
-Warn,  T25212: Found 52 degenerated primitives
+Info,  T31124: Entering post processing pipeline
+Info,  T31124: RemoveRedundantMatsProcess finished. 5 redundant and 2 unused materials
+Warn,  T31124: Found 20 degenerated primitives
+Warn,  T31124: Found 7 degenerated primitives
+Warn,  T31124: Found 72 degenerated primitives
+Warn,  T31124: Found 52 degenerated primitives
 Skipping one or more lines with the same contents
-Warn,  T25212: Found 72 degenerated primitives
-Info,  T25212: TriangulateProcess finished. All polygons have been triangulated.
-Info,  T25212: Points: 0, Lines: 5, Triangles: 36, Polygons: 0 (Meshes, X = removed)
-Error, T25212: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
+Info,  T31124: TriangulateProcess finished. All polygons have been triangulated.
+Info,  T31124: Points: 0, Lines: 5, Triangles: 41, Polygons: 0 (Meshes, X = removed)
+Error, T31124: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
 Skipping one or more lines with the same contents
-Info,  T25212: FindInvalidDataProcess finished. Found issues ...
-Info,  T25212: Tangents are undefined for line and point meshes
+Info,  T31124: FindInvalidDataProcess finished. Found issues ...
+Info,  T31124: Tangents are undefined for line and point meshes
 Skipping one or more lines with the same contents
-Error, T25212: Unable to compute tangents: UV0 and normals must be there 
-Info,  T25212: JoinVerticesProcess finished | Verts in: 196980 out: 132825 | ~32.6%
-Error, T25212: This algorithm works on triangle meshes only
+Error, T31124: Unable to compute tangents: UV0 and normals must be there 
+Info,  T31124: JoinVerticesProcess finished | Verts in: 198444 out: 133630 | ~32.7%
+Error, T31124: This algorithm works on triangle meshes only
 Skipping one or more lines with the same contents
-Info,  T25212: Cache relevant are 36 meshes (81182 faces). Average output ACMR is 1.679806
-Info,  T25212: Leaving post processing pipeline
+Info,  T31124: Cache relevant are 41 meshes (81994 faces). Average output ACMR is 1.673940
+Info,  T31124: Leaving post processing pipeline
