@@ -1,25 +1,23 @@
-Info,  T28152: Load ../debug/models/stanza46.obj
-Info,  T28152: Found a matching importer for this file format
-Info,  T28152: Import root directory is '../debug/models\'
-Error, T28152: OBJ/MTL: Unexpected illumination model (0-2 recognized)
+Info,  T27756: Load ../debug/models/stanzafinal.obj
+Info,  T27756: Found a matching importer for this file format
+Info,  T27756: Import root directory is '../debug/models\'
+Error, T27756: OBJ/MTL: Unexpected illumination model (0-2 recognized)
 Skipping one or more lines with the same contents
-Info,  T28152: Entering post processing pipeline
-Info,  T28152: RemoveRedundantMatsProcess finished. 5 redundant and 2 unused materials
-Warn,  T28152: Found 20 degenerated primitives
-Warn,  T28152: Found 7 degenerated primitives
-Warn,  T28152: Found 72 degenerated primitives
-Warn,  T28152: Found 52 degenerated primitives
+Info,  T27756: Entering post processing pipeline
+Info,  T27756: RemoveRedundantMatsProcess finished. 5 redundant and 2 unused materials
+Warn,  T27756: Found 20 degenerated primitives
+Warn,  T27756: Found 7 degenerated primitives
+Warn,  T27756: Found 52 degenerated primitives
 Skipping one or more lines with the same contents
-Info,  T28152: TriangulateProcess finished. All polygons have been triangulated.
-Info,  T28152: Points: 0, Lines: 5, Triangles: 41, Polygons: 0 (Meshes, X = removed)
-Error, T28152: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
+Info,  T27756: TriangulateProcess finished. All polygons have been triangulated.
+Info,  T27756: Points: 0, Lines: 4, Triangles: 41, Polygons: 0 (Meshes, X = removed)
+Error, T27756: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
+Info,  T27756: FindInvalidDataProcess finished. Found issues ...
+Info,  T27756: Tangents are undefined for line and point meshes
 Skipping one or more lines with the same contents
-Info,  T28152: FindInvalidDataProcess finished. Found issues ...
-Info,  T28152: Tangents are undefined for line and point meshes
+Error, T27756: Unable to compute tangents: UV0 and normals must be there 
+Info,  T27756: JoinVerticesProcess finished | Verts in: 197452 out: 133271 | ~32.5%
+Error, T27756: This algorithm works on triangle meshes only
 Skipping one or more lines with the same contents
-Error, T28152: Unable to compute tangents: UV0 and normals must be there 
-Info,  T28152: JoinVerticesProcess finished | Verts in: 198444 out: 133630 | ~32.7%
-Error, T28152: This algorithm works on triangle meshes only
-Skipping one or more lines with the same contents
-Info,  T28152: Cache relevant are 41 meshes (81994 faces). Average output ACMR is 1.673940
-Info,  T28152: Leaving post processing pipeline
+Info,  T27756: Cache relevant are 41 meshes (81712 faces). Average output ACMR is 1.676045
+Info,  T27756: Leaving post processing pipeline

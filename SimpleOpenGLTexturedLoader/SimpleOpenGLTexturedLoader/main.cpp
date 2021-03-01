@@ -229,7 +229,7 @@ void menu_display(void)
 	}*/
 
 	char text_row_3[30] = "";
-	std::string text_row_1 = "W E L C O M E";
+	std::string text_row_1 = "              "; // "W E L C O M E";
 	std::string text_row_2 = "Start new game";
 	sprintf_s(text_row_3, "Select difficulty: %d", difficulty);
 	std::string text_row_4 = "How to Play";
@@ -449,7 +449,7 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	//	glutInitWindowPosition(100,100);
 	glutInitWindowSize(XRES, YRES);
-	glutCreateWindow("Assimp - Very simple OpenGL sample");
+	glutCreateWindow("myPiano Training - Informatica Grafica");
 
 	
 	glutDisplayFunc(display);
@@ -475,7 +475,8 @@ int main(int argc, char** argv)
 
 	// the model name can be specified on the command line. 
 
-	loadasset("../debug/models/stanza46.obj");
+	loadasset("../debug/models/stanzafinal.obj");
+	// loadasset("../debug/models/stanza46.obj");
 	// loadasset("../debug/models/stanza2.obj");
 	// loadasset("../debug/models/room_2.obj");
 	// loadasset("../debug/models/piano.obj");
