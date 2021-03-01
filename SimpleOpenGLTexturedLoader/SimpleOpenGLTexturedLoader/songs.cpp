@@ -21,6 +21,7 @@ nota_t vett[500];
 int n = 0, next_to_play = 0, consecutive = 0;
 float speed = -0.0035;
 song_t ttls;
+char nome[30] = "";
 
 int totalNotes;
 float songPrecision;
@@ -57,6 +58,7 @@ void create_song(int song) {
 	if (song == 1) twinkleTwinkle();
 	else if (song == 2) fraMartino();
 	else if (song == 3) ohSusanna();
+	else if (song == 4) ohSusanna();
 }
 
 
@@ -93,13 +95,9 @@ void play_song() {
 	}
 
 	if (ttls.base_coord <= ttls.end) {	//canzone finita
-		menu = 1;
-		sprintf_s(message, "");
-		ttls.base_coord = 1;
-		next_to_play = 0;
-		consecutive = 0;
-		bonus = 1;
-		punti = 0;
+		if (max_punti < punti)
+			max_punti = punti; 
+		reset_all();
 		piano->play2D("audios/applause.wav", false);
 	}
 
@@ -158,6 +156,16 @@ int correct_pitch(unsigned char key) {
 	return res;
 }
 
+void reset_all() {
+	menu = 1;
+	sprintf_s(message, "");
+	ttls.base_coord = 1;
+	next_to_play = 0;
+	consecutive = 0;
+	bonus = 1;
+	punti = 0;
+}
+
 /*float min(float a, float b) {
 	if (a <= b) {
 		return a;
@@ -174,6 +182,7 @@ void twinkleTwinkle(void) {
 
 	totalNotes = 48;
 	songPrecision = 1;
+	sprintf_s(nome, "Twinkle twinkle little star");
 
 	vett[0] = DO;
 	vett[1] = DO;
@@ -236,7 +245,8 @@ void twinkleTwinkle(void) {
 void fraMartino(void) {
 
 	totalNotes = 64;
-	songPrecision = 2.5;
+	songPrecision = 1.5;
+	sprintf(nome, "Fra Martino");
 
 	vett[0] = DO;
 	vett[1] = pause;
@@ -318,6 +328,7 @@ void ohSusanna(void) {
 	totalNotes = 381;
 	//songPrecision = 18;
 	songPrecision = 2;
+	sprintf_s(nome, "Oh Susanna");
 
 	vett[0] = pause;
 	vett[1] = DO;

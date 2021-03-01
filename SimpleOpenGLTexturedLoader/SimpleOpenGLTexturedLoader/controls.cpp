@@ -12,7 +12,7 @@ float angle = 28.27f;
 float height = 3.f;
 char menu = 1;
 int difficulty = 2;							// 1 = EASY, 2 = MEDIUM, 3 = HARD
-int punti = 0, bonus = 1;
+int punti = 0, bonus = 1, max_punti = 0;
 short int pos_titolo, pos_start, pos_diff, pos_sel;
 char message[10] = "";
 ISoundEngine* piano = createIrrKlangDevice();

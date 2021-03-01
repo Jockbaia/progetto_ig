@@ -17,7 +17,7 @@ extern float angle_start, lx, lz, x, z, angle, height;
 extern char menu;
 extern int difficulty;
 extern short int pos_titolo, pos_start, pos_diff, pos_sel;
-extern int punti, bonus;
+extern int punti, bonus, max_punti;
 extern char message[10];
 
 void keyboard(unsigned char key, int x, int y);

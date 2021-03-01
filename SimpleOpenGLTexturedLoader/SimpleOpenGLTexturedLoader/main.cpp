@@ -173,11 +173,11 @@ void show_ipad(void) {
 
 void show_instructions(void) {
 	float tmp;
-	x = -10.5448, z = 6.33886, lx = -0.233497, lz = 0.972358;
+	x = -8.65f, z = 7.f, lx = -0.233497, lz = 0.972358;
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(x, 1.8, z, x + lx, 1.0f, z + lz, 0.0f, 1.0f, 0.0f);
+	gluLookAt(x, -0.7f, z, x + lx, -1.f, z + lz, 0.0f, 1.0f, 0.0f);
 	
 	
 
@@ -187,7 +187,7 @@ void show_instructions(void) {
 	tmp = aisgl_max(scene_max.z - scene_min.z, tmp);
 	tmp = 1.f / tmp;
 
-	glScalef(5, 5, 5);
+	glScalef(4,4,4);
 
 	// center the model
 	glTranslatef(-scene_center.x, -scene_center.y, -scene_center.z);
@@ -229,14 +229,14 @@ void menu_display(void)
 	}*/
 
 	char text_row_3[30] = "";
-	std::string text_row_1 = "              "; // "W E L C O M E";
+	char text_row_1[20] = ""; // "W E L C O M E";
 	std::string text_row_2 = "Start new game";
 	sprintf_s(text_row_3, "Select difficulty: %d", difficulty);
 	std::string text_row_4 = "How to Play";
 	
 	if (menu == 1) {
-		pos_titolo = 550;
-		output(500, pos_titolo, text_row_1, font1);
+		pos_titolo = 120;
+		//output(500, pos_titolo, text_row_1, font1);
 		pos_start = 220;
 		output(500, pos_start, text_row_2, font2);
 		pos_sel = 160;
@@ -244,16 +244,20 @@ void menu_display(void)
 		pos_diff = 100;
 		output(495, pos_diff, text_row_3, font2);
 		output(515, pos_diff - 55, text_row_4, font2);
+		output(20, pos_titolo, "Current song: ", font2);
+		output(150, pos_titolo, nome, font2);
+		sprintf_s(text_row_1, "High score: %d", max_punti);
+		output(1100, pos_titolo, text_row_1, font2);
 	}
 	else if (menu == 2) {
 		pos_titolo = 525;
 		pos_start = 460;
 		pos_sel = 390;
 		pos_diff = 315;
-		output(670, pos_titolo,	"                          ", font2);
-		output(670, pos_start,	"                          ", font2);
-		output(670, pos_sel,	"                          ", font2);
-		output(670, pos_diff,	"                          ", font2);
+//		output(670, pos_titolo,	"                          ", font2);
+//		output(670, pos_start,	"                          ", font2);
+//		output(670, pos_sel,	"                          ", font2);
+//		output(670, pos_diff,	"                          ", font2);
 	}
 	
 
@@ -283,9 +287,14 @@ void game_display(void)
 
 	char points[12] = "";
 	sprintf_s(points, "Score: %d", punti);
-
 	output(20, 650, points, font1);
+	if (bonus != 1) {
+		sprintf_s(points, "Bonus: %d", bonus);
+		output(20, 600, points, font1);
+	}
+
 	output(XRES / 2 - 10, YRES / 2 + 50, message, font2);
+	output(XRES - 265, YRES - 265, "Back to menu", font2);
 
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
@@ -301,6 +310,13 @@ void game_display(void)
 	glVertex3f(-2, -0.5, -2.6);
 	glEnd();
 
+	glPolygonMode(GL_FRONT, GL_LINE);
+	glBegin(GL_POLYGON);
+	glVertex3f(1.1, 0.25, -2.6);
+	glVertex3f(1.48, 0.25, -2.6);
+	glVertex3f(1.48, 0.35, -2.6);
+	glVertex3f(1.1, 0.35, -2.6);
+	glEnd();
 
 	show_piano();
 	glutSwapBuffers();
@@ -387,6 +403,14 @@ void mouse(int button, int state, int x, int y)
 			
 			
 			glutPostRedisplay();
+		}
+		else if (state == GLUT_DOWN && menu == 0) {
+			if (x > XRES - 265 && x < XRES - 140  && y < 275 && y > 245) {
+				menu = 1;
+				reset_all();
+				glutPostRedisplay();
+			}
+		
 		}
 		break;
 		/*   case GLUT_RIGHT_BUTTON:
