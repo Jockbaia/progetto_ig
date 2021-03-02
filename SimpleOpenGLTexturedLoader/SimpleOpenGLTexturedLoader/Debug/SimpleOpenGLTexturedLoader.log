@@ -1,5 +1,6 @@
 ﻿cl : command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
   songs.cpp
+D:\GitHub\progetto_ig\progetto_ig\SimpleOpenGLTexturedLoader\SimpleOpenGLTexturedLoader\songs.cpp(249,2): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   modelLoader.cpp
 D:\GitHub\progetto_ig\progetto_ig\AssImp\include\aiVector2D.h(75,16): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 D:\GitHub\progetto_ig\progetto_ig\AssImp\include\aiQuaternion.h(122,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data

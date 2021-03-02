@@ -230,24 +230,24 @@ void menu_display(void)
 
 	char text_row_3[30] = "";
 	char text_row_1[20] = ""; // "W E L C O M E";
-	std::string text_row_2 = "Start new game";
-	sprintf_s(text_row_3, "Select difficulty: %d", difficulty);
+	std::string text_row_2 = "Start new Game";
+	sprintf_s(text_row_3, "Select Difficulty: %d", difficulty);
 	std::string text_row_4 = "How to Play";
 	
 	if (menu == 1) {
 		pos_titolo = 120;
 		//output(500, pos_titolo, text_row_1, font1);
 		pos_start = 220;
-		output(500, pos_start, text_row_2, font2);
+		output(570, pos_start - 40, text_row_2, font2);
 		pos_sel = 160;
-		output(510, pos_sel, "Select song", font2);
+		output(583, pos_start - 80, "Select Song", font2);
 		pos_diff = 100;
-		output(495, pos_diff, text_row_3, font2);
-		output(515, pos_diff - 55, text_row_4, font2);
-		output(20, pos_titolo, "Current song: ", font2);
-		output(150, pos_titolo, nome, font2);
-		sprintf_s(text_row_1, "High score: %d", max_punti);
-		output(1100, pos_titolo, text_row_1, font2);
+		output(560, pos_start - 120, text_row_3, font2);
+		output(587, pos_start - 160, text_row_4, font2);
+		output(20, pos_titolo - 70, "Current song: ", font2);
+		output(20, pos_titolo - 70 - 25, nome, font2);
+		sprintf_s(text_row_1, "High Score: %d", max_punti);
+		output(1140, pos_titolo - 70 - 25, text_row_1, font2);
 	}
 	else if (menu == 2) {
 		pos_titolo = 525;
@@ -331,13 +331,16 @@ void mouse(int button, int state, int x, int y)
 	switch (button) {
 	case GLUT_LEFT_BUTTON:
 		if (state == GLUT_DOWN && menu == 1) {
-			if (x > 500 && x < 660 && y>(YRES - 30 - pos_start) && y < (YRES - pos_start)) {   //start new game
+			
+			int padding = 220;
+
+			if (x > 500 && x < 660 && y>(YRES + padding - pos_start - 200) && y < (YRES + padding - pos_start - 180)) {   //start new game
 				std::cout << "CLICK! Inizia a giocare\n";
 				piano->play2D("audios/click.wav", false);
 				menu = 0;
 				glutPostRedisplay();
 			}
-			if (x > 495 && x < 670 && y>(YRES - 30 - pos_diff) && y < (YRES - pos_diff)) {   //set difficulty
+			if (x > 495 && x < 670 && y>(YRES + padding - pos_start - 120) && y < (YRES + padding - pos_start - 100)) {   //set difficulty
 				std::cout << "CLICK! Cambio Difficoltà\n";
 				piano->play2D("audios/click.wav", false);
 				difficulty = difficulty + 1;
@@ -346,14 +349,14 @@ void mouse(int button, int state, int x, int y)
 				}
 				menu_display();
 			}
-			if (x > 510 && x<650 && y>(YRES - 30 - pos_sel) && y < (YRES - pos_sel)) {	//show song menu
+			if (x > 510 && x<650 && y>(YRES + padding - pos_start - 160) && y < (YRES + padding - pos_start - 140)) {	//show song menu
 				std::cout << "CLICK! Menù Canzoni\n";
 				piano->play2D("audios/click.wav", false);
 				menu = 2;
 				glutPostRedisplay();
 			}
 
-			if (x > 515 && x<650 && y>(YRES - pos_diff + 45) && y < (YRES - pos_diff + 100)) {	//show instructions
+			if (x > 515 && x<650 && y>(YRES + padding - pos_start - 80) && y < (YRES + padding - pos_start - 60)) {	//show instructions
 				std::cout << "CLICK! Istruzioni di Gioco\n";
 				piano->play2D("audios/paper1.wav", false);
 				menu = 3;
@@ -406,6 +409,7 @@ void mouse(int button, int state, int x, int y)
 		}
 		else if (state == GLUT_DOWN && menu == 0) {
 			if (x > XRES - 265 && x < XRES - 140  && y < 275 && y > 245) {
+				piano->play2D("audios/click.wav", false);
 				menu = 1;
 				reset_all();
 				glutPostRedisplay();

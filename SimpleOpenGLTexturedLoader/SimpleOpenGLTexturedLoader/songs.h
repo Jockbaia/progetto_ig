@@ -15,4 +15,5 @@ void reset_all();
 void twinkleTwinkle(void);
 void fraMartino(void);
 void ohSusanna(void);
+void innoAllaGioia(void);
 
