@@ -69,7 +69,7 @@ void play_song() {
 	glColor3f(0.0, 1.0, 1.0);
 	glPushMatrix();
 	glLoadIdentity();
-	n = 0;
+	n = next_to_play;
 
 	while (n < totalNotes) {
 		/*if (ttls.base_coord + ttls.offset * n > 2)
@@ -144,10 +144,10 @@ int correct_pitch(unsigned char key) {
 		}
 
 	}
-	else {	//Nota sbagliata, passa a nota successiva (azzera bonus e dà malus)
+	else {	//Nota sbagliata, aspetta nota giusta (azzera bonus e dà malus)
 		consecutive = 0;
 		bonus = 1;
-		next_to_play++;
+		//next_to_play++;
 		res = 0;
 	}
 	while (ttls.note[next_to_play].key == '_') {
@@ -181,7 +181,7 @@ void reset_all() {
 void twinkleTwinkle(void) {
 
 	totalNotes = 48;
-	songPrecision = 1;
+	songPrecision = 1.1;
 	sprintf_s(nome, "Twinkle Twinkle Little Star");
 
 	vett[0] = DO;
@@ -327,7 +327,7 @@ void ohSusanna(void) {
 
 	totalNotes = 381;
 	//songPrecision = 18;
-	songPrecision = 2;
+	songPrecision = 1.8;
 	sprintf_s(nome, "Oh Susanna");
 
 	vett[0] = pause;
@@ -724,7 +724,7 @@ void innoAllaGioia(void) {
 
 	totalNotes = 256;
 	//songPrecision = 18;
-	songPrecision = 2;
+	songPrecision = 1.8;
 	sprintf_s(nome, "Inno alla Gioia");
 
 	vett[0] = MI;

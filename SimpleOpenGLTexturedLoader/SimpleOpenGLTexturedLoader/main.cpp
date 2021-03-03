@@ -356,7 +356,7 @@ void mouse(int button, int state, int x, int y)
 				glutPostRedisplay();
 			}
 
-			if (x > 515 && x<650 && y>(YRES + padding - pos_start - 80) && y < (YRES + padding - pos_start - 60)) {	//show instructions
+			if (x > 585 && x<690 && y>(YRES + padding - pos_start - 80) && y < (YRES + padding - pos_start - 60)) {	//show instructions
 				std::cout << "CLICK! Istruzioni di Gioco\n";
 				piano->play2D("audios/paper1.wav", false);
 				menu = 3;
