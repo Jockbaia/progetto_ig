@@ -14,10 +14,10 @@ void do_motion(void)
 	static float increment = 0.05;
 	//int time = glutGet(GLUT_ELAPSED_TIME);
 	if (angle_start > 40) {
-		increment = -0.05;
+		increment = -0.03;
 	}
 	if (angle_start < 28) {
-		increment = +0.05;
+		increment = +0.03;
 	}
 
 	angle_start += increment;
@@ -444,8 +444,6 @@ void display(void)
 	// 1 = Main Menù
 	// 2 = Song Selection
 	// 0 = Free-roaming / game
-	
-	
 
 	if (menu == 1) {
 		maintheme(1);
